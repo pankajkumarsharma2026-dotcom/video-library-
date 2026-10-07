@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Video Library</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .box {
+      max-width: 500px;
+      margin: 60px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    input {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      background: #222;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #videos {
+      display: none;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .video {
+      background: white;
+      margin: 20px 0;
+      padding: 15px;
+      border-radius: 12px;
+    }
+
+    iframe {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: 0;
+      border-radius: 8px;
+    }
+
+    #message {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box" id="loginBox">
+    <h1>🔐 My Video Library</h1>
+    <p>Password enter karo</p>
+
+    <input type="password" id="password" placeholder="Password">
+
+    <br>
+
+    <button onclick="login()">Watch Videos</button>
+
+    <p id="message"></p>
+  </div>
+
+
+  <div id="videos">
+    <h1>🎬 My Video Library</h1>
+
+    <div class="video">
+      <h2>Video 1</h2>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID_1"
+        allowfullscreen></iframe>
+    </div>
+
+    <div class="video">
+      <h2>Video 2</h2>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID_2"
+        allowfullscreen></iframe>
+    </div>
+
+    <div class="video">
+      <h2>Video 3</h2>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID_3"
+        allowfullscreen></iframe>
+    </div>
+
+    <div class="video">
+      <h2>Video 4</h2>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID_4"
+        allowfullscreen></iframe>
+    </div>
+
+    <div class="video">
+      <h2>Video 5</h2>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID_5"
+        allowfullscreen></iframe>
+    </div>
+
+    <div class="video">
+      <h2>Video 6</h2>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID_6"
+        allowfullscreen></iframe>
+    </div>
+
+    <div class="video">
+      <h2>Video 7</h2>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID_7"
+        allowfullscreen></iframe>
+    </div>
+
+    <div class="video">
+      <h2>Video 8</h2>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID_8"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+
+
+  <script>
+    const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+    const SUPABASE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
+
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    async function login() {
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("message");
+
+      if (!password) {
+        message.textContent = "Password enter karo.";
+        return;
+      }
+
+      const { data, error } = await supabaseClient.rpc(
+        "check_site_password",
+        {
+          input_password: password
+        }
+      );
+
+      if (error) {
+        message.textContent = "Something went wrong.";
+        return;
+      }
+
+      if (data === true) {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("videos").style.display = "block";
+      } else {
+        message.textContent = "Wrong password.";
+      }
+    }
+  </script>
+
+</body>
+</html>
